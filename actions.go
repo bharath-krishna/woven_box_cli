@@ -21,6 +21,7 @@ import (
 func listFilesAction(c *cli.Context) error {
 	filenames, err := listFiles()
 	if err != nil {
+		c.App.Run([]string{c.App.Name, "help"})
 		return err
 	}
 
@@ -52,7 +53,7 @@ func uploadFileAction(c *cli.Context) error {
 
 func loginAction(c *cli.Context) error {
 	client := &http.Client{}
-	url := "http://localhost:3000/api/token"
+	url := "http://woven-box.bharathk.in/api/token"
 
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Println("Enter email")

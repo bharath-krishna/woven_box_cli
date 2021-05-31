@@ -23,7 +23,7 @@ func getToken() (map[string]string, error) {
 
 	jsonFile, err := os.Open(token_file_path)
 	if err != nil {
-		fmt.Println(err)
+		return nil, errors.New("Unauthorized. Try login command.")
 	}
 	defer jsonFile.Close()
 
@@ -44,7 +44,7 @@ func listFiles() ([]string, error) {
 		return nil, err
 	}
 
-	url := "http://localhost:8088/api/uploads?path=asdf"
+	url := "http://api.bharathk.in/api/uploads?path=asdf"
 	client := &http.Client{}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -90,7 +90,7 @@ func deleteFIle(filename string) error {
 
 	client := &http.Client{}
 
-	url := "http://localhost:8088/api/uploads/" + filename
+	url := "http://api.bharathk.in/api/uploads/" + filename
 
 	req, err := http.NewRequest("DELETE", url, nil)
 	req.Header.Add("Authorization", "Bearer "+token["accessToken"])
@@ -127,7 +127,7 @@ func uploadFile(filename string) error {
 
 	client := &http.Client{}
 
-	url := "http://localhost:8088/api/uploads"
+	url := "http://api.bharathk.in/api/uploads"
 
 	if _, err := os.Stat(filename); err != nil {
 		return errors.New(fmt.Sprintf("File '%s' does not exist in current directory.\n", filename))
