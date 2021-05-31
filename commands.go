@@ -24,6 +24,12 @@ func getCommands() []*cli.Command {
 			Usage:   "upload files",
 			Action:  uploadFileAction,
 		},
+		{
+			Name:    "login",
+			Aliases: []string{"lo"},
+			Usage:   "Login to Woven Box",
+			Action:  loginAction,
+		},
 	}
 	return commands
 }
