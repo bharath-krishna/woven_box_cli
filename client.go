@@ -15,7 +15,7 @@ func getToken() (map[string]string, error) {
 		return nil, err
 	}
 
-	token_file_path := usr.HomeDir + "/.woven_box/authn_token.json"
+	token_file_path := usr.HomeDir + "/.woven_box_authn_token.json"
 
 	jsonFile, err := os.Open(token_file_path)
 	if err != nil {

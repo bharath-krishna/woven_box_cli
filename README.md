@@ -52,7 +52,7 @@ Field | Value
 ---
 
 ## Logging in and getting authentication token
-Authenticate using username and password by running `woctl login` command. Once successfully authenticated a token in json format containing access token and refresh token will be downloaded and stored in `~/.woven_box/authn_token.json`.
+Authenticate using username and password by running `woctl login` command. Once successfully authenticated a token in json format containing access token and refresh token will be downloaded and stored in `~/.woven_box_authn_token.json`.
 
 This JWT token is used in every calls to woven box APIs [http://api.bharathk.in/apidocs](http://api.bharathk.in/apidocs) to authenticate and fetch files list, upload and delete files.
 
