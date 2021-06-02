@@ -114,7 +114,7 @@ func loginAction(c *cli.Context) error {
 		return err
 	}
 
-	token_file_path := usr.HomeDir + "/.woven_box/authn_token.json"
+	token_file_path := usr.HomeDir + "/.woven_box_authn_token.json"
 	f, err := os.Create(token_file_path)
 	if err != nil {
 		return err
