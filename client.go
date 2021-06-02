@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -34,85 +33,21 @@ func getToken() (map[string]string, error) {
 	return *tokenrespDataa, nil
 }
 
-type Files struct {
-	filenames []string
-}
-
 func listFiles() ([]string, error) {
-	token, err := getToken()
+	a := getDefaultAPIClient()
+	respData, err := a.getFiles()
 	if err != nil {
 		return nil, err
-	}
-
-	url := "http://api.bharathk.in/api/uploads?path=asdf"
-	client := &http.Client{}
-
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Authorization", "Bearer "+token["accessToken"])
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	var respData map[string][]string
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		var bodyDaata map[string]interface{}
-		if err := json.Unmarshal(body, &bodyDaata); err != nil {
-			return nil, err
-		}
-
-		return nil, errors.New(fmt.Sprint(bodyDaata["detail"]))
-	} else {
-		if err := json.Unmarshal(body, &respData); err != nil {
-			return nil, err
-		}
 	}
 
 	return respData["filenames"], nil
 }
 
 func deleteFIle(filename string) error {
-	token, err := getToken()
+	a := getDefaultAPIClient()
+	err := a.deleteFIle(filename)
 	if err != nil {
 		return err
-	}
-
-	client := &http.Client{}
-
-	url := "http://api.bharathk.in/api/uploads/" + filename
-
-	req, err := http.NewRequest("DELETE", url, nil)
-	req.Header.Add("Authorization", "Bearer "+token["accessToken"])
-
-	if err != nil {
-		return err
-	}
-	resp, err := client.Do(req)
-	if err != nil {
-		return err
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		bodyBytes, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return err
-		}
-		var datbodyBytes map[string]interface{}
-		if err := json.Unmarshal(bodyBytes, &datbodyBytes); err != nil {
-			return err
-		}
-		return errors.New(fmt.Sprint(datbodyBytes["detail"]))
 	}
 
 	fmt.Printf("File '%s' Deleted successfully\n", filename)
@@ -120,35 +55,8 @@ func deleteFIle(filename string) error {
 }
 
 func uploadFile(filename string) error {
-	token, err := getToken()
-	if err != nil {
-		return err
-	}
-
-	client := &http.Client{}
-
-	url := "http://api.bharathk.in/api/uploads"
-
-	if _, err := os.Stat(filename); err != nil {
-		return errors.New(fmt.Sprintf("File '%s' does not exist in current directory.\n", filename))
-	}
-
-	resp, err := UploadMultipartFile(client, url, "uploaded_files", filename, token)
-	if err != nil {
-		return err
-	}
-	if resp.StatusCode != http.StatusOK {
-		bodyBytes, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			log.Fatal(err)
-		}
-		var datbodyBytes map[string]interface{}
-		if errbodyBytes := json.Unmarshal(bodyBytes, &datbodyBytes); errbodyBytes != nil {
-			panic(errbodyBytes)
-		}
-
-		return errors.New(fmt.Sprint(datbodyBytes["detail"]))
-	}
+	a := getDefaultAPIClient()
+	a.uploadFile(filename)
 	fmt.Printf("The file %s uploaded successfully\n", filename)
 	return nil
 }
