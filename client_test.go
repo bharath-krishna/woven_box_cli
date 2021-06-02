@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/user"
 	"testing"
 )
 
@@ -15,7 +16,12 @@ func TestGetToken(t *testing.T) {
 		t.Error(err)
 	}
 
-	token_file_path := "./authn_token.json"
+	usr, err := user.Current()
+	if err != nil {
+		t.Error(err)
+	}
+
+	token_file_path := usr.HomeDir + "/.woven_box_authn_token.json"
 	f, err := os.Create(token_file_path)
 	if err != nil {
 		t.Error(err)
